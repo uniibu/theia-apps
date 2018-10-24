@@ -68,9 +68,6 @@ RUN set -ex \
 
 ##GO
 
-#Required to use go get with git source
-RUN apt-get update && apt-get install -y git
-
 ENV GO_VERSION 1.9.4
 ENV GOPATH=/usr/local/go-packages
 ENV GO_ROOT=/usr/local/go
@@ -113,7 +110,7 @@ RUN ln -s /usr/bin/clangd-8 /usr/bin/clangd
 RUN pip install python-language-server;
 
 #PHP
-RUN apt-get -y install php curl php-cli php-mbstring unzip
+RUN apt-get -y install php php-cli php-mbstring unzip
 
 # https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
 # https://linuxconfig.org/how-to-install-php-composer-on-debian-linux
@@ -137,8 +134,6 @@ RUN chmod g+rw /home && \
   chown -R theia:theia /home/project;
 
 #Theia
-##Needed for node-gyp, nsfw build
-RUN apt-get update && apt-get install -y python build-essential
 
 USER theia
 ARG version=latest

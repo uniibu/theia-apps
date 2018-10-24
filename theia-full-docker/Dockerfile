@@ -3,7 +3,8 @@ FROM ubuntu:16.04
 #Common deps and developer tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
   curl xz-utils git sudo && \
-  apt-get install -y python python-pip
+  apt-get install -y python python-pip && \
+  apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 #Install node and yarn
 #From: https://github.com/nodejs/docker-node/blob/6b8d86d6ad59e0d1e7a94cec2e909cad137a028f/8/Dockerfile
@@ -98,20 +99,23 @@ RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true 
 RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee /etc/apt/sources.list.d/webupd8team-java.list \
   && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 \
   && apt-get update \
-  && apt-get install -y oracle-java8-installer
+  && apt-get install -y oracle-java8-installer \
+  && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 #C/C++
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 # public LLVM PPA, development version of LLVM
 RUN echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial main" > /etc/apt/sources.list.d/llvm.list
-RUN apt-get update && apt-get install -y clang-tools-8
+RUN apt-get update && apt-get install -y clang-tools-8 \
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 RUN ln -s /usr/bin/clangd-8 /usr/bin/clangd
 
 #Python 2
 RUN pip install python-language-server;
 
 #PHP
-RUN apt-get -y install php php-cli php-mbstring unzip
+RUN apt-get update && apt-get -y install php php-cli php-mbstring unzip \
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 # https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
 # https://linuxconfig.org/how-to-install-php-composer-on-debian-linux
@@ -120,7 +124,8 @@ RUN curl -s -o composer-setup.php https://getcomposer.org/installer \
     && rm composer-setup.php
 
 #Ruby
-RUN apt-get -y install ruby ruby-dev zlib1g-dev
+RUN apt-get update && apt-get -y install ruby ruby-dev zlib1g-dev \
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 RUN gem install solargraph
 
 

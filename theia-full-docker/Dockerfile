@@ -1,7 +1,9 @@
 FROM ubuntu:16.04
 
-#Common deps
-RUN apt-get update && apt-get -y install curl xz-utils
+#Common deps and developer tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  curl xz-utils git sudo && \
+  apt-get install -y python python-pip
 
 #Install node and yarn
 #From: https://github.com/nodejs/docker-node/blob/6b8d86d6ad59e0d1e7a94cec2e909cad137a028f/8/Dockerfile
@@ -62,11 +64,6 @@ RUN set -ex \
   && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
-#Developer tools
-
-## Git and sudo (sudo needed for user override)
-RUN apt-get -y install git sudo
-
 #LSPs
 
 ##GO
@@ -113,8 +110,7 @@ RUN apt-get update && apt-get install -y clang-tools-8
 RUN ln -s /usr/bin/clangd-8 /usr/bin/clangd
 
 #Python 2
-RUN apt-get update && apt-get install -y python python-pip && \
-pip install python-language-server;
+RUN pip install python-language-server;
 
 #PHP
 RUN apt-get -y install php curl php-cli php-mbstring unzip

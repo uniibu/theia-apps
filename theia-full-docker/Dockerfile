@@ -93,9 +93,10 @@ RUN go get -u -v github.com/haya14busa/goplay/cmd/goplay
 RUN go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
 
 #Java
+# http://www.webupd8.org/2014/03/how-to-install-oracle-java-8-in-debian.html
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN apt-get update && apt-get -y install software-properties-common
-RUN add-apt-repository ppa:webupd8team/java \
+RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee /etc/apt/sources.list.d/webupd8team-java.list \
+  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 \
   && apt-get update \
   && apt-get install -y oracle-java8-installer
 
